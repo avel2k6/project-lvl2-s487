@@ -15,3 +15,9 @@ npm: https://www.npmjs.com/package/gendiff-avel2k6
 ```
 sudo npm install -g gendiff-avel2k6
 ```
+## HELP
+```
+gendiff -h
+```
+
+[![asciicast](https://asciinema.org/a/MNQEXBkio1DkUyAohNAYB8rkA.svg)](https://asciinema.org/a/MNQEXBkio1DkUyAohNAYB8rkA)
