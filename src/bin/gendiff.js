@@ -12,7 +12,7 @@ program
   .action((firstConfig, secondConfig, options) => {
     const { format } = options;
     const diff = genDiff(firstConfig, secondConfig);
-    console.log(format);
+    if (format !== undefined) console.log(format);
     console.log(diff);
   });
 

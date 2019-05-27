@@ -9,21 +9,22 @@ const genDiff = (pathToFile1, pathToFile2) => {
   const file2Data = JSON.parse(file2Content);
   const allKeysData = { ...file1Data, ...file2Data };
 
-  const compareAllKeys = (result, value, key) => {
+  const compareAllKeys = (acc, value, key) => {
     if (_.has(file1Data, key) && _.has(file2Data, key)) {
       return file1Data[key] === file2Data[key]
-        ? `${result}\n   ${key}: ${value}`
-        : `${result}\n + ${key}: ${file2Data[key]}\n - ${key}: ${file1Data[key]}`;
+        ? [...acc, `   ${key}: ${value}`]
+        : [...acc, ` + ${key}: ${file2Data[key]}`, ` - ${key}: ${file1Data[key]}`];
     }
     if (!_.has(file1Data, key) && _.has(file2Data, key)) {
-      return `${result}\n + ${key}: ${value}`;
+      return [...acc, ` + ${key}: ${value}`];
     }
-    return `${result}\n - ${key}: ${value}`;
+    return [...acc, ` - ${key}: ${value}`];
   };
 
-  const comparedKeysString = _.reduce(allKeysData, compareAllKeys, '');
-  const result = `{${comparedKeysString}\n}\n`;
-  return result;
+  const diffCollection = _.reduce(allKeysData, compareAllKeys, '');
+  const diffString = `{\n${diffCollection.join('\n')}\n}`;
+
+  return diffString;
 };
 
 export default genDiff;
