@@ -9,7 +9,7 @@ const genDiff = (pathToFile1, pathToFile2) => {
   const file2Data = JSON.parse(file2Content);
   const allKeysData = { ...file1Data, ...file2Data };
 
-  const reduceFn = (result, value, key) => {
+  const compareAllKeys = (result, value, key) => {
     if (_.has(file1Data, key) && _.has(file2Data, key)) {
       return file1Data[key] === file2Data[key]
         ? `${result}\n   ${key}: ${value}`
@@ -21,8 +21,9 @@ const genDiff = (pathToFile1, pathToFile2) => {
     return `${result}\n - ${key}: ${value}`;
   };
 
-  const result = _.reduce(allKeysData, reduceFn, '');
-  console.log(result);
+  const comparedKeysString = _.reduce(allKeysData, compareAllKeys, '');
+  const result = `{${comparedKeysString}\n}\n`;
+  return result;
 };
 
 export default genDiff;

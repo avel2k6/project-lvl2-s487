@@ -11,4 +11,7 @@ lint:
 	npx eslint .
 
 test:
-	npx babel-node __tests__/gendiff.test.js
+	npm test
+
+watch:
+	npx jest --watch
