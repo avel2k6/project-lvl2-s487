@@ -9,3 +9,6 @@ publish:
 
 lint:
 	npx eslint .
+
+test:
+	npx babel-node __tests__/gendiff.test.js
