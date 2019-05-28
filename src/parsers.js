@@ -13,30 +13,17 @@ export default class Parsers {
     const parserFunctions = [
       {
         type: '.json',
-        parser: (content) => {
-        //  const content = fs.readFileSync(filePath, 'utf8');
-          const data = JSON.parse(content);
-          return data;
-        },
+        parser: content => JSON.parse(content),
       },
       {
         type: '.yml',
-        parser: (content) => {
-        //  const content = fs.readFileSync(filePath, 'utf8');
-          const data = yaml.safeLoad(content);
-          return data;
-        },
+        parser: content => yaml.safeLoad(content),
       },
       {
         type: '.ini',
-        parser: (content) => {
-          //  const content = fs.readFileSync(filePath, 'utf8');
-          const data = ini.parse(content);
-          return data;
-        },
+        parser: content => ini.parse(content),
       },
     ];
-
     const findParser = extname => parserFunctions.find(({ type }) => extname === type);
     const { parser } = findParser(this.extname);
     return parser;
