@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import yaml from 'js-yaml';
 
 export default class Parsers {
   constructor(pathToFile) {
@@ -18,10 +19,13 @@ export default class Parsers {
         },
       },
       {
-        type: '.yaml',
-        parser: arg => arg instanceof Array,
+        type: '.yml',
+        parser: (filePath) => {
+          const content = fs.readFileSync(filePath, 'utf8');
+          const data = yaml.safeLoad(content);
+          return data;
+        },
       },
-
     ];
 
     const findParser = extname => parserFunctions.find(({ type }) => extname === type);
@@ -30,9 +34,6 @@ export default class Parsers {
   }
 
   getData() {
-    // const fileContent = fs.readFileSync(this.pathToFile, 'utf8');
-    // const fileData = JSON.parse(fileContent);
-    // return fileData;
     const parser = this.getParser();
     const fileData = parser(this.pathToFile);
     return fileData;
