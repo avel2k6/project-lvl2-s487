@@ -24,3 +24,6 @@ gendiff -h
 
 ## JSON
 [![asciicast](https://asciinema.org/a/jcIVVXXthtk4QwGWFJi0XZjEu.svg)](https://asciinema.org/a/jcIVVXXthtk4QwGWFJi0XZjEu)
+
+## YAML
+[![asciicast](https://asciinema.org/a/yrU3HiAXeAhur71vyH9hNKEMx.svg)](https://asciinema.org/a/yrU3HiAXeAhur71vyH9hNKEMx)
