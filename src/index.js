@@ -1,12 +1,13 @@
-import fs from 'fs';
+// import fs from 'fs';
 import _ from 'lodash';
+import Parsers from './parsers';
 
 const genDiff = (pathToFile1, pathToFile2) => {
-  const file1Content = fs.readFileSync(pathToFile1, 'utf8');
-  const file2Content = fs.readFileSync(pathToFile2, 'utf8');
+  const file1 = new Parsers(pathToFile1);
+  const file2 = new Parsers(pathToFile2);
 
-  const file1Data = JSON.parse(file1Content);
-  const file2Data = JSON.parse(file2Content);
+  const file1Data = file1.getData();
+  const file2Data = file2.getData();
   const allKeysData = { ...file1Data, ...file2Data };
 
   const compareAllKeys = (acc, value, key) => {
