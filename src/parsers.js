@@ -12,16 +12,16 @@ export default class Parsers {
     const parserFunctions = [
       {
         type: '.json',
-        parser: (filePath) => {
-          const content = fs.readFileSync(filePath, 'utf8');
+        parser: (content) => {
+        //  const content = fs.readFileSync(filePath, 'utf8');
           const data = JSON.parse(content);
           return data;
         },
       },
       {
         type: '.yml',
-        parser: (filePath) => {
-          const content = fs.readFileSync(filePath, 'utf8');
+        parser: (content) => {
+        //  const content = fs.readFileSync(filePath, 'utf8');
           const data = yaml.safeLoad(content);
           return data;
         },
@@ -34,8 +34,9 @@ export default class Parsers {
   }
 
   getData() {
+    const fileContent = fs.readFileSync(this.pathToFile, 'utf8');
     const parser = this.getParser();
-    const fileData = parser(this.pathToFile);
+    const fileData = parser(fileContent);
     return fileData;
   }
 }
