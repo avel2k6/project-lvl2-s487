@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import yaml from 'js-yaml';
+import ini from 'ini';
 
 export default class Parsers {
   constructor(pathToFile) {
@@ -23,6 +24,14 @@ export default class Parsers {
         parser: (content) => {
         //  const content = fs.readFileSync(filePath, 'utf8');
           const data = yaml.safeLoad(content);
+          return data;
+        },
+      },
+      {
+        type: '.ini',
+        parser: (content) => {
+          //  const content = fs.readFileSync(filePath, 'utf8');
+          const data = ini.parse(content);
           return data;
         },
       },

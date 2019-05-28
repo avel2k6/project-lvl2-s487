@@ -27,3 +27,6 @@ gendiff -h
 
 ## YAML
 [![asciicast](https://asciinema.org/a/yrU3HiAXeAhur71vyH9hNKEMx.svg)](https://asciinema.org/a/yrU3HiAXeAhur71vyH9hNKEMx)
+
+## INI
+[![asciicast](https://asciinema.org/a/ptHImCXtUdKXvAKNymeinksdk.svg)](https://asciinema.org/a/ptHImCXtUdKXvAKNymeinksdk)

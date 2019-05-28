@@ -8,6 +8,7 @@ const genDiff = (pathToFile1, pathToFile2) => {
 
   const file1Data = file1.getData();
   const file2Data = file2.getData();
+
   const allKeysData = { ...file1Data, ...file2Data };
 
   const compareAllKeys = (acc, value, key) => {
