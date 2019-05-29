@@ -2,7 +2,7 @@ import fs from 'fs';
 import genDiff from '../src';
 
 const expected = fs.readFileSync('__tests__/__fixtures__/expected.txt').toString().trim();
-
+const expectedBig = fs.readFileSync('__tests__/__fixtures__/expected-big.txt').toString().trim();
 // const pathToJson1 = '__tests__/__fixtures__/before.json';
 // const pathToJson2 = '__tests__/__fixtures__/after.json';
 //
@@ -40,5 +40,18 @@ test.each([testJson, testYaml, testIni])(
   '.genDiff(%s,%s)',
   (path1, path2) => {
     expect(genDiff(path1, path2)).toBe(expected);
+  },
+);
+
+const testJsonBig = [
+  '__tests__/__fixtures__/before-big.json',
+  '__tests__/__fixtures__/after-big.json',
+  expected,
+];
+
+test.each([testJsonBig])(
+  '.genDiff(%s,%s)',
+  (path1, path2) => {
+    expect(genDiff(path1, path2)).toBe(expectedBig);
   },
 );

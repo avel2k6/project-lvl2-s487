@@ -30,3 +30,8 @@ gendiff -h
 
 ## INI
 [![asciicast](https://asciinema.org/a/ptHImCXtUdKXvAKNymeinksdk.svg)](https://asciinema.org/a/ptHImCXtUdKXvAKNymeinksdk)
+
+## Json
+
+Big .json file
+[![asciicast](https://asciinema.org/a/Hyga2Kotag1HQpvNohq4JEmJv.svg)](https://asciinema.org/a/Hyga2Kotag1HQpvNohq4JEmJv)
