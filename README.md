@@ -31,7 +31,7 @@ gendiff -h
 ## INI
 [![asciicast](https://asciinema.org/a/ptHImCXtUdKXvAKNymeinksdk.svg)](https://asciinema.org/a/ptHImCXtUdKXvAKNymeinksdk)
 
-## Json
+## Big files
 
-Big .json file
-[![asciicast](https://asciinema.org/a/Hyga2Kotag1HQpvNohq4JEmJv.svg)](https://asciinema.org/a/Hyga2Kotag1HQpvNohq4JEmJv)
+Big .json, yml and ini files
+[![asciicast](https://asciinema.org/a/3YQyNoSNggQmlBNy1bEQnQW02.svg)](https://asciinema.org/a/3YQyNoSNggQmlBNy1bEQnQW02)
