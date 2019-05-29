@@ -21,19 +21,16 @@ const expectedBig = fs.readFileSync('__tests__/__fixtures__/expected-big.txt').t
 const testJson = [
   '__tests__/__fixtures__/before.json',
   '__tests__/__fixtures__/after.json',
-  expected,
 ];
 
 const testYaml = [
   '__tests__/__fixtures__/before.yml',
   '__tests__/__fixtures__/after.yml',
-  expected,
 ];
 
 const testIni = [
   '__tests__/__fixtures__/before.ini',
   '__tests__/__fixtures__/after.ini',
-  expected,
 ];
 
 test.each([testJson, testYaml, testIni])(
@@ -46,10 +43,19 @@ test.each([testJson, testYaml, testIni])(
 const testJsonBig = [
   '__tests__/__fixtures__/before-big.json',
   '__tests__/__fixtures__/after-big.json',
-  expected,
 ];
 
-test.each([testJsonBig])(
+const testYamlBig = [
+  '__tests__/__fixtures__/before-big.yml',
+  '__tests__/__fixtures__/after-big.yml',
+];
+
+const testIniBig = [
+  '__tests__/__fixtures__/before-big.ini',
+  '__tests__/__fixtures__/after-big.ini',
+];
+
+test.each([testJsonBig, testYamlBig, testIniBig])(
   '.genDiff(%s,%s)',
   (path1, path2) => {
     expect(genDiff(path1, path2)).toBe(expectedBig);
