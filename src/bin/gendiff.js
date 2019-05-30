@@ -11,8 +11,7 @@ program
   .option('-f, --format [type]', 'output format')
   .action((firstConfig, secondConfig, options) => {
     const { format } = options;
-    const diff = genDiff(firstConfig, secondConfig);
-    if (format !== undefined) console.log(format);
+    const diff = genDiff(firstConfig, secondConfig, format);
     console.log(diff);
   });
 

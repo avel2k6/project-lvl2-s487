@@ -1,6 +1,6 @@
-// import fs from 'fs';
 import _ from 'lodash';
 import Parsers from './parsers';
+import getFormatter from './formatters';
 
 const getChanges = (a, b) => {
   if (a === b) return { result: 'former', old: a };
@@ -24,69 +24,19 @@ const makeAst = (obj1, obj2) => {
   );
 };
 
-const getIndent = depth => '  '.repeat(depth);
-
-const stringify = (obj, depth) => {
-  if (typeof obj !== 'object') {
-    return `${obj.toString()}`;
+const genDiff = (pathToFile1, pathToFile2, options = 'default') => {
+  if (!pathToFile1 || !pathToFile2) {
+    return 'Error: Expected two arguments';
   }
-  const keys = Object.keys(obj);
-  const indent = getIndent(depth);
-  const keysColl = keys.reduce(
-    (acc, el) => ([...acc, `${indent}   ${el}: ${obj[el]}`]),
-    '',
-  );
-  return `{\n${keysColl}\n${indent}}`;
-};
 
-const getString = (el, depth) => {
-  const intent = getIndent(depth);
-  if (_.has(el, 'changes')) {
-    const { result } = el.changes;
-    const oldValue = (el.changes.old !== undefined)
-      ? stringify(el.changes.old, depth + 1)
-      : '';
-    const newValue = (el.changes.new !== undefined)
-      ? stringify(el.changes.new, depth + 1)
-      : '';
-    switch (result) {
-      case 'former':
-        return `  ${el.key}: ${oldValue}`;
-      case 'deleted':
-        return `- ${el.key}: ${oldValue}`;
-      case 'modified':
-        return `- ${el.key}: ${oldValue}\n${intent}+ ${el.key}: ${newValue}`;
-      default:
-        return `+ ${el.key}: ${newValue}`;
-    }
-  }
-  return `  ${el.key}`;
-};
-
-const render = (astObj, depth = 0) => {
-  const intent = getIndent(depth);
-  const result = astObj.reduce(
-    (acc, element) => {
-      const string = getString(element, depth);
-      return _.has(element, 'children')
-        ? [...acc, `${intent}${string}: ${render(element.children, depth + 1)}`]
-        : [...acc, `${intent}${string}`];
-    },
-    [],
-  );
-  return `{\n${result.join('\n')}\n${intent}}`;
-};
-
-const genDiff = (pathToFile1, pathToFile2) => {
   const file1 = new Parsers(pathToFile1);
   const file2 = new Parsers(pathToFile2);
 
   const file1Data = file1.getData();
   const file2Data = file2.getData();
 
-  // console.log('-------');
-
   const ast = makeAst(file1Data, file2Data);
+  const render = getFormatter(options);
   const res = render(ast);
   // console.log(JSON.stringify(ast, null, ' '));
   return res;

@@ -35,3 +35,11 @@ gendiff -h
 
 Big .json, yml and ini files
 [![asciicast](https://asciinema.org/a/3YQyNoSNggQmlBNy1bEQnQW02.svg)](https://asciinema.org/a/3YQyNoSNggQmlBNy1bEQnQW02)
+
+## Options
+
+--format plain
+```
+gendiff --format plain before-big.json after-big.json
+```
+[![asciicast](https://asciinema.org/a/xY21VAIzJsFwlg8Yg6q4NfjhO.svg)](https://asciinema.org/a/xY21VAIzJsFwlg8Yg6q4NfjhO)
