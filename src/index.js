@@ -2,11 +2,11 @@ import _ from 'lodash';
 import getData from './parsers';
 import getFormatter from './formatters';
 
-const getChanges = (a, b) => {
-  if (a === b) return { result: 'former', old: a };
-  if (a === undefined && b !== undefined) return { result: 'added', new: b };
-  if (a !== undefined && b === undefined) return { result: 'deleted', old: a };
-  return { result: 'modified', old: a, new: b };
+const getChanges = (first, second) => {
+  if (first === second) return { result: 'former', old: first };
+  if (first === undefined && second !== undefined) return { result: 'added', new: second };
+  if (first !== undefined && second === undefined) return { result: 'deleted', old: first };
+  return { result: 'modified', old: first, new: second };
 };
 const makeAst = (obj1, obj2) => {
   const allKeys = _.union(Object.keys(obj1), Object.keys(obj2));
