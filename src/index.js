@@ -25,21 +25,16 @@ const makeAst = (obj1, obj2) => {
 };
 
 const genDiff = (pathToFile1, pathToFile2, options = 'default') => {
-  if (!pathToFile1 || !pathToFile2) {
-    return 'Error: Expected two arguments';
-  }
-
   const file1 = new Parsers(pathToFile1);
   const file2 = new Parsers(pathToFile2);
-
   const file1Data = file1.getData();
   const file2Data = file2.getData();
 
   const ast = makeAst(file1Data, file2Data);
   const render = getFormatter(options);
-  const res = render(ast);
+  const renderText = render(ast);
   // console.log(JSON.stringify(ast, null, ' '));
-  return res;
+  return renderText;
 };
 
 export default genDiff;

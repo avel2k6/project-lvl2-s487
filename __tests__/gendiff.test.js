@@ -4,6 +4,8 @@ import genDiff from '../src';
 const expected = fs.readFileSync('__tests__/__fixtures__/expected.txt').toString().trim();
 const expectedBig = fs.readFileSync('__tests__/__fixtures__/expected-big.txt').toString().trim();
 const expectedPlain = fs.readFileSync('__tests__/__fixtures__/expected-plain.txt').toString().trim();
+const expectedJson = fs.readFileSync('__tests__/__fixtures__/expected-json.txt').toString().trim();
+
 
 const testJson = [
   '__tests__/__fixtures__/before.json',
@@ -54,5 +56,19 @@ test.each([testJsonBig, testYamlBig, testIniBig])(
   'Big files to genDiff(%s,%s) with plain option',
   (path1, path2) => {
     expect(genDiff(path1, path2, 'plain')).toBe(expectedPlain);
+  },
+);
+
+test.each([testJsonBig, testYamlBig, testIniBig])(
+  'Big files to genDiff(%s,%s) with "plain" option',
+  (path1, path2) => {
+    expect(genDiff(path1, path2, 'plain')).toBe(expectedPlain);
+  },
+);
+
+test.each([testJsonBig, testYamlBig, testIniBig])(
+  'Big files to genDiff(%s,%s) with "json" option',
+  (path1, path2) => {
+    expect(genDiff(path1, path2, 'json')).toBe(expectedJson);
   },
 );

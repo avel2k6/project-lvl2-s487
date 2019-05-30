@@ -43,3 +43,10 @@ Big .json, yml and ini files
 gendiff --format plain before-big.json after-big.json
 ```
 [![asciicast](https://asciinema.org/a/xY21VAIzJsFwlg8Yg6q4NfjhO.svg)](https://asciinema.org/a/xY21VAIzJsFwlg8Yg6q4NfjhO)
+
+
+--format json
+```
+gendiff --format json before-big.json after-big.json
+```
+[![asciicast](https://asciinema.org/a/NubMoJRDPt6t6vmcldZMgdUtc.svg)](https://asciinema.org/a/NubMoJRDPt6t6vmcldZMgdUtc)
