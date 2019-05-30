@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import Parsers from './parsers';
+import getData from './parsers';
 import getFormatter from './formatters';
 
 const getChanges = (a, b) => {
@@ -25,10 +25,8 @@ const makeAst = (obj1, obj2) => {
 };
 
 const genDiff = (pathToFile1, pathToFile2, options = 'default') => {
-  const file1 = new Parsers(pathToFile1);
-  const file2 = new Parsers(pathToFile2);
-  const file1Data = file1.getData();
-  const file2Data = file2.getData();
+  const file1Data = getData(pathToFile1);
+  const file2Data = getData(pathToFile2);
 
   const ast = makeAst(file1Data, file2Data);
   const render = getFormatter(options);
