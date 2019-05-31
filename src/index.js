@@ -8,6 +8,9 @@ import getFormatter from './formatters';
 const makeNode = (obj1, obj2, key) => {
   const nodeRoot = { key, type: '', children: [] };
 
+  if (typeof obj1[key] === 'object' && typeof obj2[key] === 'object') {
+    return { ...nodeRoot, type: 'parental' };
+  }
   if (_.has(obj1, key) && !_.has(obj2, key)) {
     return { ...nodeRoot, type: 'deleted', oldValue: obj1[key] };
   }
@@ -29,8 +32,8 @@ const makeAst = (obj1, obj2) => {
   return allKeys.reduce(
     (acc, key) => {
       const node = makeNode(obj1, obj2, key);
-      return (typeof obj1[key] === 'object' && typeof obj2[key] === 'object')
-        ? [...acc, { ...node, type: 'parental', children: makeAst(obj1[key], obj2[key]) }]
+      return (node.type === 'parental')
+        ? [...acc, { ...node, children: makeAst(obj1[key], obj2[key]) }]
         : [...acc, { ...node }];
     },
     [],

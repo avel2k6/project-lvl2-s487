@@ -69,22 +69,9 @@ test.each([testJsonBig, testYamlBig, testIniBig])(
   },
 );
 
-test.each([testJsonBig, testYamlBig])(
+test.each([testJsonBig, testYamlBig, testIniBig])(
   'Big files to genDiff(%s,%s) with "json" option',
   (path1, path2) => {
     expect(genDiff(path1, path2, 'json')).toBe(readFile(expectedJson));
   },
 );
-
-// test('Simular AST from different types', () => {
-//   expect(genDiff(
-//     '__tests__/__fixtures__/before-big.ini',
-//     '__tests__/__fixtures__/after-big.ini',
-//     'json',
-//   ))
-//     .toBe(genDiff(
-//       '__tests__/__fixtures__/before-big.json',
-//       '__tests__/__fixtures__/after-big.json',
-//       'json',
-//     ));
-// });
