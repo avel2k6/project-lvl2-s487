@@ -1,121 +1,153 @@
 [
- {
-  "key": "common",
-  "children": [
-   {
-    "key": "setting1",
-    "changes": {
-     "result": "former",
-     "old": "Value 1"
-    }
-   },
-   {
-    "key": "setting2",
-    "changes": {
-     "result": "deleted",
-     "old": "200"
-    }
-   },
-   {
-    "key": "setting3",
-    "changes": {
-     "result": "modified",
-     "old": true,
-     "new": {
-      "key": "value"
-     }
-    }
-   },
-   {
-    "key": "setting6",
-    "children": [
-     {
-      "key": "key",
-      "changes": {
-       "result": "former",
-       "old": "value"
-      }
-     },
-     {
-      "key": "ops",
-      "changes": {
-       "result": "added",
-       "new": "vops"
-      }
-     }
-    ]
-   },
-   {
-    "key": "follow",
-    "changes": {
-     "result": "added",
-     "new": false
-    }
-   },
-   {
-    "key": "setting4",
-    "changes": {
-     "result": "added",
-     "new": "blah blah"
-    }
-   },
-   {
-    "key": "setting5",
-    "changes": {
-     "result": "added",
-     "new": {
-      "key5": "value5"
-     }
-    }
-   }
-  ]
- },
- {
-  "key": "group1",
-  "children": [
-   {
-    "key": "baz",
-    "changes": {
-     "result": "modified",
-     "old": "bas",
-     "new": "bars"
-    }
-   },
-   {
-    "key": "foo",
-    "changes": {
-     "result": "former",
-     "old": "bar"
-    }
-   },
-   {
-    "key": "nest",
-    "changes": {
-     "result": "modified",
-     "old": {
-      "key": "value"
-     },
-     "new": "str"
-    }
-   }
-  ]
- },
- {
-  "key": "group2",
-  "changes": {
-   "result": "deleted",
-   "old": {
-    "abc": "12345"
-   }
-  }
- },
- {
-  "key": "group3",
-  "changes": {
-   "result": "added",
-   "new": {
-    "fee": "100500"
-   }
-  }
- }
+	{
+		"key": "common",
+		"type": "parental",
+		"children": [
+			{
+				"key": "setting1",
+				"type": "unchanged",
+				"children": [],
+				"oldValue": "Value 1"
+			},
+			{
+				"key": "setting2",
+				"type": "deleted",
+				"children": [],
+				"oldValue": "200"
+			},
+			{
+				"key": "setting3",
+				"type": "modified",
+				"children": [],
+				"oldValue": true,
+				"newValue": {
+					"key": "value"
+				}
+			},
+			{
+				"key": "setting6",
+				"type": "parental",
+				"children": [
+					{
+						"key": "key",
+						"type": "unchanged",
+						"children": [],
+						"oldValue": "value"
+					},
+					{
+						"key": "ops",
+						"type": "added",
+						"children": [],
+						"newValue": "vops"
+					}
+				],
+				"oldValue": {
+					"key": "value"
+				},
+				"newValue": {
+					"key": "value",
+					"ops": "vops"
+				}
+			},
+			{
+				"key": "follow",
+				"type": "added",
+				"children": [],
+				"newValue": false
+			},
+			{
+				"key": "setting4",
+				"type": "added",
+				"children": [],
+				"newValue": "blah blah"
+			},
+			{
+				"key": "setting5",
+				"type": "added",
+				"children": [],
+				"newValue": {
+					"key5": "value5"
+				}
+			}
+		],
+		"oldValue": {
+			"setting1": "Value 1",
+			"setting2": "200",
+			"setting3": true,
+			"setting6": {
+				"key": "value"
+			}
+		},
+		"newValue": {
+			"follow": false,
+			"setting1": "Value 1",
+			"setting3": {
+				"key": "value"
+			},
+			"setting4": "blah blah",
+			"setting5": {
+				"key5": "value5"
+			},
+			"setting6": {
+				"key": "value",
+				"ops": "vops"
+			}
+		}
+	},
+	{
+		"key": "group1",
+		"type": "parental",
+		"children": [
+			{
+				"key": "baz",
+				"type": "modified",
+				"children": [],
+				"oldValue": "bas",
+				"newValue": "bars"
+			},
+			{
+				"key": "foo",
+				"type": "unchanged",
+				"children": [],
+				"oldValue": "bar"
+			},
+			{
+				"key": "nest",
+				"type": "modified",
+				"children": [],
+				"oldValue": {
+					"key": "value"
+				},
+				"newValue": "str"
+			}
+		],
+		"oldValue": {
+			"baz": "bas",
+			"foo": "bar",
+			"nest": {
+				"key": "value"
+			}
+		},
+		"newValue": {
+			"foo": "bar",
+			"baz": "bars",
+			"nest": "str"
+		}
+	},
+	{
+		"key": "group2",
+		"type": "deleted",
+		"children": [],
+		"oldValue": {
+			"abc": "12345"
+		}
+	},
+	{
+		"key": "group3",
+		"type": "added",
+		"children": [],
+		"newValue": {
+			"fee": "100500"
+		}
+	}
 ]

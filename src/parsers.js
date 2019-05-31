@@ -1,32 +1,20 @@
-import fs from 'fs';
-import path from 'path';
 import yaml from 'js-yaml';
 import ini from 'ini';
 
-const getParser = (pathToFile) => {
-  const fileExtname = path.extname(pathToFile);
-  const parserFunctions = [
-    {
-      type: '.json',
-      parser: content => JSON.parse(content),
-    },
-    {
-      type: '.yml',
-      parser: content => yaml.safeLoad(content),
-    },
-    {
-      type: '.ini',
-      parser: content => ini.parse(content),
-    },
-  ];
-  const findParser = extname => parserFunctions.find(({ type }) => extname === type);
-  const { parser } = findParser(fileExtname);
+const getParser = (fileExtname) => {
+  const parserFunctions = new Map([
+    ['.json', content => JSON.parse(content)],
+    ['.yml', content => yaml.safeLoad(content)],
+    ['.ini', content => ini.parse(content)],
+  ]);
+
+  const parser = parserFunctions.get(fileExtname);
   return parser;
 };
 
-const getData = (pathToFile) => {
-  const fileContent = fs.readFileSync(pathToFile, 'utf8');
-  const parser = getParser(pathToFile);
+const getData = (inputData) => {
+  const { fileContent, fileExtname } = inputData;
+  const parser = getParser(fileExtname);
   const fileData = parser(fileContent);
   return fileData;
 };

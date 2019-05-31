@@ -15,37 +15,34 @@ const stringify = (obj, depth) => {
   return `{\n${keysColl}\n${indent}}`;
 };
 
-const getPropertyString = (el, depth) => {
+const getPropertyString = (node, depth) => {
   const intent = getIndent(depth);
-  if (_.has(el, 'changes')) {
-    const { result } = el.changes;
-    const oldValue = (el.changes.old !== undefined)
-      ? stringify(el.changes.old, depth + 1)
-      : '';
-    const newValue = (el.changes.new !== undefined)
-      ? stringify(el.changes.new, depth + 1)
-      : '';
-    switch (result) {
-      case 'former':
-        return `  ${el.key}: ${oldValue}`;
-      case 'deleted':
-        return `- ${el.key}: ${oldValue}`;
-      case 'modified':
-        return `- ${el.key}: ${oldValue}\n${intent}+ ${el.key}: ${newValue}`;
-      default:
-        return `+ ${el.key}: ${newValue}`;
-    }
-  }
-  return `  ${el.key}`;
+
+  const oldValue = (_.has(node, 'oldValue'))
+    ? stringify(node.oldValue, depth + 1)
+    : '';
+  const newValue = (_.has(node, 'newValue'))
+    ? stringify(node.newValue, depth + 1)
+    : '';
+
+  const typeDescriptions = new Map([
+    ['parental', `  ${node.key}`],
+    ['unchanged', `  ${node.key}: ${oldValue}`],
+    ['deleted', `- ${node.key}: ${oldValue}`],
+    ['added', `+ ${node.key}: ${newValue}`],
+    ['modified', `- ${node.key}: ${oldValue}\n${intent}+ ${node.key}: ${newValue}`],
+  ]);
+
+  return typeDescriptions.get(node.type);
 };
 
 const render = (astObj, depth = 0) => {
   const intent = getIndent(depth);
   const result = astObj.reduce(
-    (acc, element) => {
-      const propertyString = getPropertyString(element, depth);
-      return _.has(element, 'children')
-        ? [...acc, `${intent}${propertyString}: ${render(element.children, depth + 1)}`]
+    (acc, node) => {
+      const propertyString = getPropertyString(node, depth);
+      return (node.type === 'parental')
+        ? [...acc, `${intent}${propertyString}: ${render(node.children, depth + 1)}`]
         : [...acc, `${intent}${propertyString}`];
     },
     [],

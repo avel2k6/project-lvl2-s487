@@ -13,27 +13,22 @@ const stringify = (data) => {
 };
 
 const getPropertyString = (node, path) => {
-  if (!_.has(node, 'changes')) {
-    return '';
-  }
-  const { result } = node.changes;
-  const oldValue = (node.changes.old !== undefined)
-    ? stringify(node.changes.old)
+  const oldValue = (_.has(node, 'oldValue'))
+    ? stringify(node.oldValue)
     : '';
-  const newValue = (node.changes.new !== undefined)
-    ? stringify(node.changes.new)
+  const newValue = (_.has(node, 'newValue'))
+    ? stringify(node.newValue)
     : '';
-  switch (result) {
-    case 'added':
-      return `Property '${path}${node.key}' was added with value: ${newValue}`;
-    case 'deleted':
-      return `Property '${path}${node.key}' was removed`;
-    case 'modified':
-      return `Property '${path}${node.key}' was updated. From ${oldValue} to ${newValue}`;
-    default:
-      break;
-  }
-  return '';
+
+  const typeDescriptions = new Map([
+    ['parental', ''],
+    ['unchanged', ''],
+    ['deleted', `Property '${path}${node.key}' was removed`],
+    ['added', `Property '${path}${node.key}' was added with value: ${newValue}`],
+    ['modified', `Property '${path}${node.key}' was updated. From ${oldValue} to ${newValue}`],
+  ]);
+
+  return typeDescriptions.get(node.type);
 };
 
 
@@ -41,13 +36,13 @@ const render = (astObj, path = '') => {
   const changedStrings = astObj.reduce(
     (acc, node) => {
       const propertyString = getPropertyString(node, path);
-      return _.has(node, 'children')
+      return (node.type === 'parental')
         ? [...acc, propertyString, render(node.children, `${path}${node.key}.`)]
         : [...acc, propertyString];
     },
     [],
   );
-  const renderResult = changedStrings.filter(string => string).join('\n');
+  const renderResult = changedStrings.filter(string => string).join('\n'); // filter(string => string)
   return renderResult;
 };
 
