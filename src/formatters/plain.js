@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 const stringify = (data) => {
   const dataType = typeof data;
   switch (dataType) {
@@ -12,33 +10,39 @@ const stringify = (data) => {
   }
 };
 
-const getPropertyString = (node, path) => {
-  const oldValue = (_.has(node, 'oldValue'))
-    ? stringify(node.oldValue)
-    : '';
-  const newValue = (_.has(node, 'newValue'))
-    ? stringify(node.newValue)
-    : '';
+const nodeHandlers = [
+  {
+    type: 'parental',
+    toString: (node, path, func) => func(node.children, `${path}${node.key}.`),
+  },
+  {
+    type: 'unchanged',
+    toString: () => '',
+  },
+  {
+    type: 'deleted',
+    toString: (node, path) => `Property '${path}${node.key}' was removed`,
+  },
+  {
+    type: 'added',
+    toString: (node, path) => `Property '${path}${node.key}' was added with value: ${stringify(node.newValue)}`,
+  },
+  {
+    type: 'modified',
+    toString: (node, path) => `Property '${path}${node.key}' was updated. From ${stringify(node.oldValue)} to ${stringify(node.newValue)}`,
+  },
+];
 
-  const typeDescriptions = new Map([
-    ['parental', ''],
-    ['unchanged', ''],
-    ['deleted', `Property '${path}${node.key}' was removed`],
-    ['added', `Property '${path}${node.key}' was added with value: ${newValue}`],
-    ['modified', `Property '${path}${node.key}' was updated. From ${oldValue} to ${newValue}`],
-  ]);
-
-  return typeDescriptions.get(node.type);
+const getPropertyString = (node, path, func) => {
+  const { toString } = nodeHandlers.find(n => (n.type === node.type));
+  return toString(node, path, func);
 };
-
 
 const render = (astObj, path = '') => {
   const changedStrings = astObj.reduce(
     (acc, node) => {
-      const propertyString = getPropertyString(node, path);
-      return (node.type === 'parental')
-        ? [...acc, propertyString, render(node.children, `${path}${node.key}.`)]
-        : [...acc, propertyString];
+      const propertyString = getPropertyString(node, path, render);
+      return [...acc, propertyString];
     },
     [],
   );

@@ -1,22 +1,15 @@
 import yaml from 'js-yaml';
 import ini from 'ini';
 
-const getParser = (fileExtname) => {
+export default (fileExtname) => {
   const parserFunctions = new Map([
-    ['.json', content => JSON.parse(content)],
-    ['.yml', content => yaml.safeLoad(content)],
-    ['.ini', content => ini.parse(content)],
+    ['.json', JSON.parse],
+    ['.yml', yaml.safeLoad],
+    ['.ini', ini.parse],
   ]);
 
   const parser = parserFunctions.get(fileExtname);
+  // console.log('ext ' + fileExtname);
+  // console.log(parser);
   return parser;
 };
-
-const getData = (inputData) => {
-  const { fileContent, fileExtname } = inputData;
-  const parser = getParser(fileExtname);
-  const fileData = parser(fileContent);
-  return fileData;
-};
-
-export default getData;

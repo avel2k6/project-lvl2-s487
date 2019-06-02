@@ -3,47 +3,49 @@ import _ from 'lodash';
 const getIndent = depth => '  '.repeat(depth);
 
 const stringify = (obj, depth) => {
-  if (typeof obj !== 'object') {
-    return `${obj.toString()}`;
+  if (!_.isObject(obj)) {
+    return `${obj}`;
   }
-  const keys = Object.keys(obj);
+  const keys = _.keys(obj);
   const indent = getIndent(depth);
-  const keysColl = keys.reduce(
-    (acc, el) => ([...acc, `${indent}   ${el}: ${obj[el]}`]),
-    '',
-  );
+  const keysColl = keys.map(el => `${indent}   ${el}: ${obj[el]}`);
   return `{\n${keysColl}\n${indent}}`;
 };
 
-const getPropertyString = (node, depth) => {
-  const intent = getIndent(depth);
+const nodeHandlers = [
+  {
+    type: 'parental',
+    toString: (node, depth, func) => `  ${node.key}: ${func(node.children, depth + 1)}`,
+  },
+  {
+    type: 'unchanged',
+    toString: (node, depth) => `  ${node.key}: ${stringify(node.oldValue, depth + 1)}`,
+  },
+  {
+    type: 'deleted',
+    toString: (node, depth) => `- ${node.key}: ${stringify(node.oldValue, depth + 1)}`,
+  },
+  {
+    type: 'added',
+    toString: (node, depth) => `+ ${node.key}: ${stringify(node.newValue, depth + 1)}`,
+  },
+  {
+    type: 'modified',
+    toString: (node, depth) => `- ${node.key}: ${stringify(node.oldValue, depth + 1)}\n${getIndent(depth)}+ ${node.key}: ${stringify(node.newValue, depth + 1)}`,
+  },
+];
 
-  const oldValue = (_.has(node, 'oldValue'))
-    ? stringify(node.oldValue, depth + 1)
-    : '';
-  const newValue = (_.has(node, 'newValue'))
-    ? stringify(node.newValue, depth + 1)
-    : '';
-
-  const typeDescriptions = new Map([
-    ['parental', `  ${node.key}`],
-    ['unchanged', `  ${node.key}: ${oldValue}`],
-    ['deleted', `- ${node.key}: ${oldValue}`],
-    ['added', `+ ${node.key}: ${newValue}`],
-    ['modified', `- ${node.key}: ${oldValue}\n${intent}+ ${node.key}: ${newValue}`],
-  ]);
-
-  return typeDescriptions.get(node.type);
+const getPropertyString = (node, depth, func) => {
+  const { toString } = nodeHandlers.find(n => (n.type === node.type));
+  return toString(node, depth, func);
 };
 
 const render = (astObj, depth = 0) => {
   const intent = getIndent(depth);
   const result = astObj.reduce(
     (acc, node) => {
-      const propertyString = getPropertyString(node, depth);
-      return (node.type === 'parental')
-        ? [...acc, `${intent}${propertyString}: ${render(node.children, depth + 1)}`]
-        : [...acc, `${intent}${propertyString}`];
+      const propertyString = getPropertyString(node, depth, render);
+      return [...acc, `${intent}${propertyString}`];
     },
     [],
   );
