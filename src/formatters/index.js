@@ -1,4 +1,4 @@
-import mainFormatter from './main';
+import prettyFormatter from './pretty';
 import plainFormatter from './plain';
 import jsonFormatter from './json';
 
@@ -9,7 +9,7 @@ const getFormatter = (options) => {
     case 'json':
       return jsonFormatter;
     default:
-      return mainFormatter;
+      return prettyFormatter;
   }
 };
 
