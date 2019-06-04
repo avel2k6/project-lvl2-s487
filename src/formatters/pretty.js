@@ -12,31 +12,35 @@ const stringify = (obj, depth) => {
   return `{\n${keysColl}\n${indent}}`;
 };
 
-const nodeHandlers = [
-  {
-    type: 'parental',
-    toString: (node, depth, func) => `  ${node.key}: ${func(node.children, depth + 1)}`,
-  },
-  {
-    type: 'unchanged',
-    toString: (node, depth) => `  ${node.key}: ${stringify(node.oldValue, depth + 1)}`,
-  },
-  {
-    type: 'deleted',
-    toString: (node, depth) => `- ${node.key}: ${stringify(node.oldValue, depth + 1)}`,
-  },
-  {
-    type: 'added',
-    toString: (node, depth) => `+ ${node.key}: ${stringify(node.newValue, depth + 1)}`,
-  },
-  {
-    type: 'modified',
-    toString: (node, depth) => `- ${node.key}: ${stringify(node.oldValue, depth + 1)}\n${getIndent(depth)}+ ${node.key}: ${stringify(node.newValue, depth + 1)}`,
-  },
-];
+const nodeHandlers = new Map([
+
+  [
+    'parental',
+    (node, depth, func) => `  ${node.key}: ${func(node.children, depth + 1)}`,
+  ],
+  [
+    'unchanged',
+    (node, depth) => `  ${node.key}: ${stringify(node.oldValue, depth + 1)}`,
+  ],
+  [
+    'deleted',
+    (node, depth) => `- ${node.key}: ${stringify(node.oldValue, depth + 1)}`,
+  ],
+  [
+    'added',
+    (node, depth) => `+ ${node.key}: ${stringify(node.newValue, depth + 1)}`,
+  ],
+  [
+    'modified',
+    (node, depth) => [
+      `- ${node.key}: ${stringify(node.oldValue, depth + 1)}`,
+      `+ ${node.key}: ${stringify(node.newValue, depth + 1)}`,
+    ],
+  ],
+]);
 
 const getPropertyString = (node, depth, func) => {
-  const { toString } = nodeHandlers.find(n => (n.type === node.type));
+  const toString = nodeHandlers.get(node.type);
   return toString(node, depth, func);
 };
 
@@ -45,11 +49,12 @@ const render = (astObj, depth = 0) => {
   const result = astObj.reduce(
     (acc, node) => {
       const propertyString = getPropertyString(node, depth, render);
-      return [...acc, `${intent}${propertyString}`];
+      return _.flatten([...acc, propertyString]);
     },
     [],
   );
-  return `{\n${result.join('\n')}\n${intent}}`;
+  const resultWithIntents = result.map(element => `${intent}${element}`);
+  return `{\n${resultWithIntents.join('\n')}\n${intent}}`;
 };
 
 export default render;

@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import fs from 'fs';
 import path from 'path';
-import getParcer from './parsers';
+import getParser from './parsers';
 import getFormatter from './formatters';
 
 
@@ -37,14 +37,7 @@ const makeNode = (obj1, obj2, key, func) => {
 
 const makeAst = (obj1, obj2) => {
   const allKeys = _.union(_.keys(obj1), _.keys(obj2));
-  // console.log(allKeys);
-  return allKeys.reduce(
-    (acc, key) => {
-      const node = makeNode(obj1, obj2, key, makeAst);
-      return [...acc, node];
-    },
-    [],
-  );
+  return allKeys.map(key => makeNode(obj1, obj2, key, makeAst));
 };
 
 const readFile = (pathToFile) => {
@@ -53,18 +46,18 @@ const readFile = (pathToFile) => {
   return { content, extname };
 };
 
-const genDiff = (pathToFile1, pathToFile2, options = 'default') => {
+const genDiff = (pathToFile1, pathToFile2, options) => {
   const fileData1 = readFile(pathToFile1);
   const fileData2 = readFile(pathToFile2);
 
-  const parsedData1 = getParcer(fileData1.extname)(fileData1.content);
-  const parsedData2 = getParcer(fileData2.extname)(fileData2.content);
+  const parsedData1 = getParser(fileData1.extname)(fileData1.content);
+  const parsedData2 = getParser(fileData2.extname)(fileData2.content);
 
   const ast = makeAst(parsedData1, parsedData2);
   const render = getFormatter(options);
-  const renderText = render(ast);
+  const renderedText = render(ast);
   // console.log(JSON.stringify(ast, null, '  '));
-  return renderText;
+  return renderedText;
 };
 
 export default genDiff;
